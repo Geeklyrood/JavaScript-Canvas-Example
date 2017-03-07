@@ -1,6 +1,6 @@
 # Fireflies Particle Effect
 ## By Keenan Rood
 
-This is a project that we worked on in my Web Multimedia Class at Chippewa Valley Technical College. 
+This is a project that we created in my Web Multimedia Class at Chippewa Valley Technical College with Jon Cooley. 
 
-It is an example of using Canvas and creating Fireflies using Particle Effects laid over a background image.
+It is an example of using a Canvas and creating Fireflies using Particle Effects laid over a background image.
