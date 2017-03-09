@@ -5,13 +5,13 @@ function init() {
   
   // Initialize variables
   fireflies = [];
-  numFlies = 250;
+  numFlies = 500;
   angleX = 0;
   angleY = 0;
   range = 1.2;
-  xSpead = .7;
+  xSpeed = .7;
   ySpeed = .1;
-  fps = 15;
+  fps = 20;
   
   // Create a batch of Firefly particle objects and add each new firefly
   // object to the fireflies array
@@ -63,9 +63,11 @@ function Firefly(topEdge, bottomEdge, leftEdge, rightEdge, xVel, yVel) {
   
   this.color = 'rgba(153, 255, 51, ' + this.alpha + ')';
   
-  this.radius = randRange(2.5, 4.5);
+  this.radius = randRange(.5, 1.5);
   
-  this.blink = true;
+  this.blink = false;
+  
+  this.maxBlinkRate = 15;
   
   this.blinkRate = Math.floor(randRange(0, this.maxBlinkRate));
   
@@ -95,8 +97,26 @@ function update() {
       
       ctx.fillStyle = fly.color;
       
+      // Based on the blinkRate property reset the blink property
+      if (fly.blinkRate >= fly.maxBlinkRate) {
+        
+        fly.blinkRate = 0;
+        fly.blink = false;
+        
+      } else {
+        
+        fly.blinkRate++;
+        
+        if (fly.blinkRate >= 7) {
+          
+          fly.blink = true;
+          
+        }
+        
+      }
+      
       // If the firefly is visible, draw it
-      if (fly.blink = true) {
+      if (fly.blink) {
         
         ctx.arc(fly.x, fly.y, fly.radius, 0, Math.PI * 2, false);
         
@@ -105,6 +125,47 @@ function update() {
       }
       
       ctx.closePath();
+      
+      // Animate each firefly particle object
+      //
+      // Apply a velocity to change the objects x and y 
+      // properties (position)
+      fly.x += fly.xVelocity + Math.cos(angleX) * range;
+      fly.y += fly.yVelocity + Math.sin(angleY) * range;
+      
+      // Alter the angle values
+      angleX += xSpeed;
+      angleY += ySpeed;
+      
+      // Collision detection at our boundries
+      // Check the bottom edge
+      if (fly.y >= fly.bottom + 25 && fly.yVelocity > 0) {
+        
+        // bottom edge
+        fly.y = fly.bottom + 5;
+        fly.yVelocity *= -1; // reverse direction
+        
+      } else if (fly.y <= fly.top - 25 && fly.yVelocity < 0) {
+        
+        // top edge
+        fly.y = 5;
+        fly.yVelocity *= -1;
+        
+      }
+      
+      if (fly.x >= fly.right + 25 && fly.xVelocity > 0) {
+        
+        // right edge
+        fly.x = fly.right + 5;
+        fly.xVelocity *= -1; // reverse direction
+        
+      } else if (fly.x <= fly.left - 25 && fly.xVelocity < 0) {
+        
+        // right edge
+        fly.x = 5;
+        fly.xVelocity *= -1;
+        
+      }
       
     });
     
